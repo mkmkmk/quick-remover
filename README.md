@@ -16,8 +16,8 @@ Drag the `.xpi` file into Firefox
 
 ### Development/Temporary
 1. Clone this repository
-2. Go to `about:debugging` in Firefox
-3. Click "This Firefox" → "Load Temporary Add-on"
+2. Go to [about:debugging](about:debugging) in Firefox
+3. Click ["This Firefox" → "Load Temporary Add-on](about:debugging#/runtime/this-firefox)
 4. Select `manifest.json`
 
 ## Usage
@@ -36,6 +36,18 @@ Drag the `.xpi` file into Firefox
 ## Requirements
 
 Firefox 109.0+
+
+### Publishing to AMO (for author)
+1. Create account on [addons.mozilla.org](https://addons.mozilla.org)
+2. Manage your add-ons at
+   [Developer Addons](https://addons.mozilla.org/pl/developers/addons)
+3. Go to "Submit a New Add-on"
+4. Choose "On your own" (unlisted - for self-distribution)
+5. Create ZIP file:
+   ```bash
+   zip quick-element-remover.zip manifest.json background.js
+   ```
+6. Upload the ZIP file
 
 ## License
 

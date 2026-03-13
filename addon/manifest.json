@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Quick Element Remover",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Removes items with one click",
   
   "browser_specific_settings": {

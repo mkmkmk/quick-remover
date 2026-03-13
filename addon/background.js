@@ -32,6 +32,27 @@ function toggleRemoveMode(tabId) {
   browser.scripting.executeScript({
     target: { tabId: tabId },
     func: () => {
+      // Funkcja wyłączająca tryb - definiuj zawsze na początku
+      window.disableRemoverMode = () => {
+        window.removerActive = false;
+        
+        if (window.removerHandler) {
+          document.removeEventListener('click', window.removerHandler, true);
+        }
+        if (window.removerHover) {
+          document.removeEventListener('mouseover', window.removerHover, true);
+        }
+        if (window.removerStyle) {
+          window.removerStyle.remove();
+        }
+        
+        document.getElementById('remover-info')?.remove();
+        
+        document.querySelectorAll('.remover-highlight').forEach(el => {
+          el.classList.remove('remover-highlight');
+        });
+      };
+      
       if (typeof window.removerActive === 'undefined') {
         window.removerActive = false;
         window.removerHandler = null;
@@ -50,6 +71,11 @@ function toggleRemoveMode(tabId) {
         let hoveredElement = null;
         
         window.removerHover = (e) => {
+          if (e.target.closest('#remover-info')) {
+            if (hoveredElement) hoveredElement.classList.remove('remover-highlight');
+            hoveredElement = null;
+            return;
+          }
           if (hoveredElement) hoveredElement.classList.remove('remover-highlight');
           hoveredElement = e.target;
           hoveredElement.classList.add('remover-highlight');
@@ -57,6 +83,8 @@ function toggleRemoveMode(tabId) {
         document.addEventListener('mouseover', window.removerHover, true);
         
         window.removerHandler = (e) => {
+          if (e.target.closest('#remover-info'))
+            return;
           e.preventDefault();
           e.stopPropagation();
           e.target.remove();
@@ -66,28 +94,17 @@ function toggleRemoveMode(tabId) {
         let info = document.createElement('div');
         info.id = 'remover-info';
         info.style.cssText = 'position:fixed;top:10px;right:10px;background:#d32f2f;color:white;padding:15px 20px;z-index:2147483647;font-family:sans-serif;border-radius:5px;box-shadow:0 2px 10px rgba(0,0,0,0.3);font-size:14px;';
-        info.innerHTML = '<strong>REMOVE MODE</strong><br>Click item to remove<br><small>Alt+Shift+X to disable</small>';
+        info.innerHTML = '<strong>REMOVE MODE</strong><br>Click item to remove<br><small>Alt+Shift+X to disable</small><span id="remover-close" style="position:absolute;top:5px;right:10px;cursor:pointer;font-size:20px;font-weight:bold;">×</span>';
         document.body.appendChild(info);
         
-      } else {
-        window.removerActive = false;
-        
-        if (window.removerHandler) {
-          document.removeEventListener('click', window.removerHandler, true);
-        }
-        if (window.removerHover) {
-          document.removeEventListener('mouseover', window.removerHover, true);
-        }
-        if (window.removerStyle) {
-          window.removerStyle.remove();
-        }
-        
-        let info = document.getElementById('remover-info');
-        if (info) info.remove();
-        
-        document.querySelectorAll('.remover-highlight').forEach(el => {
-          el.classList.remove('remover-highlight');
+        document.getElementById('remover-close').addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          window.disableRemoverMode();
         });
+
+      } else {
+        window.disableRemoverMode();
       }
     }
   });
