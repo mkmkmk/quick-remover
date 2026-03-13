@@ -45,7 +45,7 @@ Firefox 109.0+
 4. Choose "On your own" (unlisted - for self-distribution)
 5. Create ZIP file:
    ```bash
-   zip quick-element-remover.zip manifest.json background.js
+   zip quick-element-remover.zip manifest.json background.js icon.svg
    ```
 6. Upload the ZIP file
 
